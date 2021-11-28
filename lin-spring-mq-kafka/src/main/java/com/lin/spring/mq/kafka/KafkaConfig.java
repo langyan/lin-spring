@@ -62,6 +62,7 @@ public class KafkaConfig {
         //拉取超时时间
         factory.getContainerProperties().setPollTimeout(pollTimeout);
         factory.setBatchListener(true);
+        factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL_IMMEDIATE);
         return factory;
     }
 

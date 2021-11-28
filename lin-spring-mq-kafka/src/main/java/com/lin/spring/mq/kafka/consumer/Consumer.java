@@ -1,17 +1,21 @@
 package com.lin.spring.mq.kafka.consumer;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.task.AsyncTaskExecutor;
-import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.config.KafkaListenerEndpointRegistry;
-import org.springframework.kafka.listener.MessageListenerContainer;
 import org.springframework.kafka.support.Acknowledgment;
+import org.springframework.kafka.support.KafkaHeaders;
+import org.springframework.messaging.handler.annotation.Header;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -22,32 +26,27 @@ public class Consumer {
 
 	ScheduledExecutorService service = Executors.newScheduledThreadPool(10);
 
-	/**
-	 * 监听test主题,有消息就读取
-	 * 
-	 * @param message
-	 */
+	private static final Logger LOG = LoggerFactory.getLogger(Consumer.class);
+
 	@KafkaListener(topics = {
-			"michael-test" },  containerGroup = "michaelGroup1", containerFactory = "ackContainerFactory")
-	public void consumer1(String message, Acknowledgment ack) {
-		System.out.println("consumer1 : " + message);
-//		ack.acknowledge();
-
-		service.scheduleWithFixedDelay(() -> {
-			MessageListenerContainer michael2 = registry.getListenerContainer("michael2");
-			if (!michael2.isRunning()) {
-				michael2.stop();
+			"michael-test1" }, containerGroup = "michaelGroup2", containerFactory = "ackContainerFactory")
+	public void consumer2(List<String> message, Acknowledgment ack) {
+		if (message != null) {
+			for (String string : message) {
+				System.out.println("consumer2  : " + string);
 			}
-
-		}, 10, 40, TimeUnit.SECONDS);
-
+		}
+		ack.acknowledge();
 	}
 
 	@KafkaListener(topics = {
-			"michael-test" }, containerGroup = "michaelGroup2", containerFactory = "ackContainerFactory", autoStartup = "false")
-	public void consumer2(String message, ConsumerRecord record, Acknowledgment ack) {
-
-		System.out.println("consumer2  : " + message);
-//		ack.acknowledge();
+			"c3i-eai-maint-change2" }, containerGroup = "michaelGroup2", containerFactory = "kafkaListenerContainerFactory")
+	public void consumer3(List<String> message, Acknowledgment ack) {
+		if (message != null) {
+			for (String string : message) {
+				System.out.println("consumer2  : " + string);
+			}
+		}
+		ack.acknowledge();
 	}
 }

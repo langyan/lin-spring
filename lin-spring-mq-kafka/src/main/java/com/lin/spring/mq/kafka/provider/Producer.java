@@ -25,8 +25,34 @@ public class Producer {
 	@Scheduled(fixedDelay=10000)
 	public void sendTest() {
 		 i++;
-		kafkaTemplate.send("michael-test",i+
-				"-kafka  " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+		kafkaTemplate.send("michael-test","key",i+
+				"-kafka-1  " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+		 i++;
+		kafkaTemplate.send("michael-test","key",i+
+				"-kafka-2  " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+		 i++;
+		kafkaTemplate.send("michael-test1","key",i+
+				"-kafka-2  " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+		 i++;
+		kafkaTemplate.send("michael-test1","key",i+
+				"-kafka-2  " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 	}
+	 
+//	 @SuppressWarnings("unchecked")
+//		@Scheduled(fixedDelay=10000)
+//		public void sendTest1() {
+//			 i++;
+//			kafkaTemplate.send("c3i-eai-maint-change","key",i+
+//					"-kafka-1  " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+//			 i++;
+//			kafkaTemplate.send("michael-test","key",i+
+//					"-kafka-2  " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+//			 i++;
+//			kafkaTemplate.send("michael-test1","key",i+
+//					"-kafka-2  " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+//			 i++;
+//			kafkaTemplate.send("michael-test1","key",i+
+//					"-kafka-2  " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+//		}
 
 }
